@@ -182,57 +182,13 @@ class Server extends BaseObject
      */
     public function fits(Plugin $plugin)
     {
-        return $this->getStorageSize() - $this->getOccupied() > $plugin->getSize();
+        return $this->getStorageSize() - $this->getOccupied() >= $plugin->getSize();
     }
 
     /**
      * @var array
      */
     protected $plugins = [];
-
-    /**
-     * determines whether the plugin is compatible with earlier plugins
-     * 
-     * @param Plugin $plugin
-     * 
-     * @return boolean
-     */
-    protected function compatibleWithEarlier(Plugin $plugin)
-    {
-        foreach ($plugin->getSupportedOS() as $os) {
-            $notFound = false;
-            $min = min(count($this->plugins), count($this->plugins));
-            for ($pIndex = 0; (!$notFound) && ($pIndex < $min); $pIndex++) {
-                if (array_search($os, $this->plugins[$pIndex]->getSupportedOS()) === false) $notFound = true;
-            }
-            if (!$notFound) return true;
-        }
-        return false;
-    }
-
-    /**
-     * determines whether a plugin is compatible with the server
-     * 
-     * @param Plugin $plugin
-     * 
-     * @return boolean
-     */
-    public function compatible(Plugin $plugin)
-    {
-        return ((($this->getOS() === self::nothing) || (array_search($this->getOS(), $plugin->getSupportedOS()) !==false)) && $this->compatibleWithEarlier($plugin));
-    }
-
-    /**
-     * Determines whether the plugin can be added
-     * 
-     * @param Plugin $plugin
-     * 
-     * @return boolean
-     */
-    public function canBeAdded($plugin)
-    {
-        return $this->fits($plugin) && $this->compatible($plugin);
-    }
 
     /**
      * Adds a plugin to the server
@@ -258,27 +214,6 @@ class Server extends BaseObject
         $plugin = array_pop($this->plugins);
         $this->release($plugin->getSize());
         return $plugin;
-    }
-
-    /**
-     * Determines whether the new solution is better than the best solution so far
-     * 
-     * @param array
-     * @param array
-     * 
-     * @return boolean
-     */
-    public static function isBetterSolution(array $servers, array $bestSolution) {
-        $firstServerCount = 0;
-        foreach ($servers as $server) {
-            if ($server->getOccupied() > 0) $firstServerCount++;
-        }
-        $serverIndices = [];
-        for ($item = 0; $item < count($bestSolution); $item++) {
-            if (($item < count($servers)) && (array_search($item, $serverIndices) === false)) $serverIndices[]=$item;
-        }
-        if ($firstServerCount < count($serverIndices)) return true;
-        return false;
     }
 
     public static function findBestDistribution($rawServers, $rawPlugins)

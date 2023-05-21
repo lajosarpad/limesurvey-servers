@@ -94,7 +94,7 @@ class SiteController extends Controller
     {
         $serverCount = intval((Yii::$app->request->post('servers')));
         $pluginCount = intval((Yii::$app->request->post('plugins')));
-        $availableServers = ["", Server::CentOS, Server::RedHat, Server::Ubuntu];
+        $availableServers = [Server::nothing, Server::CentOS, Server::RedHat, Server::Ubuntu];
         $availableVersions = [Plugin::v_1_2, Plugin::v_1_3, Plugin::v_2, Plugin::latest];
         $servers = [];
         while ($serverCount--) {
