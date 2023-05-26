@@ -2,12 +2,12 @@
 
 namespace app\Models;
 
-use \yii\base\BaseObject;
+use \yii\base\Model;
 use \Exception;
 use app\models\Plugin;
 use app\models\Stack;
 
-class Server extends BaseObject
+class Server extends Model
 {
 
     public const nothing = '';

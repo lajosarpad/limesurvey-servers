@@ -2,9 +2,9 @@
 
 namespace app\Models;
 
-use \yii\base\BaseObject;
+use \yii\base\Model;
 
-class Plugin extends BaseObject
+class Plugin extends Model
 {
 
     public const v_1_2 = 'v.1.2';
